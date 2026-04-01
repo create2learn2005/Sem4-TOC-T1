@@ -4,15 +4,29 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Theory of Computation</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="logo">Theory of Computation</div>
+
+  <!-- Particle Canvas -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Ambient orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <header class="topbar" id="topbar">
+    <div class="logo">
+      <span class="logo-icon"><i class="fas fa-microchip"></i></span>
+      <span class="logo-text">ToC<span class="logo-accent">.</span></span>
+    </div>
     <nav class="nav">
       <a href="index.html" class="active">Home</a>
       <a href="unit.html?unit=1">Unit 1</a>
@@ -20,60 +34,271 @@
       <a href="unit.html?unit=3">Unit 3</a>
       <a href="unit.html?unit=4">Unit 4</a>
     </nav>
+    <div class="nav-glow"></div>
   </header>
 
   <main class="container">
-    <section class="hero">
-      <div class="hero-badge">Theory of Computation Portal</div>
-      <h1>Master <span>Theory of Computation</span></h1>
-      <p>
+    <section class="hero" id="hero">
+      <div class="hero-eyebrow" id="hero-eyebrow">
+        <span class="pulse-dot"></span>
+        Theory of Computation Portal
+      </div>
+      <h1 id="hero-title">
+        <span class="title-line">Master the</span>
+        <span class="title-line accent-line">Art of Computation</span>
+      </h1>
+      <p class="hero-sub" id="hero-sub">
         Practice questions unit-wise, reveal answers directly inside cards,
-        and view image-based DFA/NFA/RE solutions wherever needed.
+        and view image-based DFA / NFA / RE solutions wherever needed.
       </p>
-      <div class="hero-actions">
-        <a class="btn-primary" href="unit.html?unit=1">Start with Unit 1</a>
-        <a class="btn-secondary" href="unit.html?unit=all">Browse All</a>
+      <div class="hero-actions" id="hero-actions">
+        <a class="btn-primary" href="unit.html?unit=1">
+          <span>Start with Unit 1</span>
+          <i class="fas fa-arrow-right"></i>
+        </a>
+        <a class="btn-secondary" href="unit.html?unit=all">
+          <span>Browse All</span>
+        </a>
+      </div>
+
+      <div class="hero-stats" id="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">4</span>
+          <span class="stat-label">Units</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">RE</span>
+          <span class="stat-label">Regex</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">FA</span>
+          <span class="stat-label">Automata</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">DFA</span>
+          <span class="stat-label">Minimize</span>
+        </div>
       </div>
     </section>
 
-    <section class="units-grid">
+    <div class="section-label" id="section-label">
+      <span>— Explore Units</span>
+    </div>
+
+    <section class="units-grid" id="units-grid">
       <a class="unit-card" href="unit.html?unit=1">
-        <div class="unit-no">01</div>
-        <h3>Unit 1</h3>
-        <p>Regular expression basics, strings, alphabets, precedence and operators.</p>
+        <div class="card-glass"></div>
+        <div class="card-inner">
+          <div class="unit-icon-wrap">
+            <div class="unit-no">01</div>
+            <div class="unit-icon-bg"></div>
+          </div>
+          <div class="card-content">
+            <h3>Unit 1</h3>
+            <p>Regular expression basics, strings, alphabets, precedence and operators.</p>
+          </div>
+          <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="card-shine"></div>
       </a>
 
       <a class="unit-card" href="unit.html?unit=2">
-        <div class="unit-no">02</div>
-        <h3>Unit 2</h3>
-        <p>Regular expressions, languages and construction-based problems.</p>
+        <div class="card-glass"></div>
+        <div class="card-inner">
+          <div class="unit-icon-wrap">
+            <div class="unit-no">02</div>
+            <div class="unit-icon-bg"></div>
+          </div>
+          <div class="card-content">
+            <h3>Unit 2</h3>
+            <p>Regular expressions, languages and construction-based problems.</p>
+          </div>
+          <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="card-shine"></div>
       </a>
 
       <a class="unit-card" href="unit.html?unit=3">
-        <div class="unit-no">03</div>
-        <h3>Unit 3</h3>
-        <p>Finite automata, DFA, NFA, states, acceptance and recognition.</p>
+        <div class="card-glass"></div>
+        <div class="card-inner">
+          <div class="unit-icon-wrap">
+            <div class="unit-no">03</div>
+            <div class="unit-icon-bg"></div>
+          </div>
+          <div class="card-content">
+            <h3>Unit 3</h3>
+            <p>Finite automata, DFA, NFA, states, acceptance and recognition.</p>
+          </div>
+          <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="card-shine"></div>
       </a>
 
       <a class="unit-card" href="unit.html?unit=4">
-        <div class="unit-no">04</div>
-        <h3>Unit 4</h3>
-        <p>RE to FA, DFA minimization, FA construction and conversion problems.</p>
+        <div class="card-glass"></div>
+        <div class="card-inner">
+          <div class="unit-icon-wrap">
+            <div class="unit-no">04</div>
+            <div class="unit-icon-bg"></div>
+          </div>
+          <div class="card-content">
+            <h3>Unit 4</h3>
+            <p>RE to FA, DFA minimization, FA construction and conversion problems.</p>
+          </div>
+          <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+        </div>
+        <div class="card-shine"></div>
       </a>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div> <pre>© 2026 🌐 LJ UNITED NETWORKS 🚀
-         - Dixit Patel </pre>
-        <pre>Follow me on Social Media</pre></div>
-    <div class="footer-socials">
-     
-      <a href="https://www.instagram.com/dixit.patel_since_2005/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://github.com/create2learn7238" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/dixit-patel-7718993a1/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      <a href="https://wa.me/919316227238" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <div class="footer-glow-line"></div>
+    <div class="footer-content">
+      <div class="footer-text">
+        © 2026 🌐 <strong>LJ United Networks</strong> 🚀 &nbsp;·&nbsp; Dixit Patel
+      </div>
+      <div class="footer-right">
+        <span class="footer-label">Follow me</span>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/dixit.patel_since_2005/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://github.com/create2learn7238" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/dixit-patel-7718993a1/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://wa.me/919316227238" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
     </div>
   </footer>
+
+  <script>
+    // ── Particle Canvas ──────────────────────────────────────────────
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const PARTICLE_COUNT = 80;
+
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    class Particle {
+      constructor() { this.reset(true); }
+      reset(initial) {
+        this.x = randomBetween(0, canvas.width);
+        this.y = initial ? randomBetween(0, canvas.height) : canvas.height + 10;
+        this.size = randomBetween(1, 2.8);
+        this.speedX = randomBetween(-0.3, 0.3);
+        this.speedY = randomBetween(-0.6, -0.18);
+        this.opacity = randomBetween(0.12, 0.55);
+        this.color = Math.random() > 0.5 ? '#FF4D00' : '#ff8a57';
+        this.pulse = randomBetween(0, Math.PI * 2);
+        this.pulseSpeed = randomBetween(0.005, 0.02);
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.pulse += this.pulseSpeed;
+        if (this.y < -10) this.reset(false);
+      }
+      draw() {
+        const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+        ctx.fill();
+      }
+    }
+
+    // Connection lines between nearby particles
+    function drawConnections() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 90) {
+            const alpha = (1 - dist / 90) * 0.12;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(255,77,0,${alpha})`;
+            ctx.lineWidth = 0.6;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawConnections();
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ── GSAP Animations ──────────────────────────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Topbar slide in
+    gsap.fromTo('#topbar',
+      { y: -70, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }
+    );
+
+    // Hero stagger
+    const heroTl = gsap.timeline({ delay: 0.3 });
+    heroTl
+      .fromTo('#hero-eyebrow', { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' })
+      .fromTo('.title-line', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.65, stagger: 0.12, ease: 'power3.out' }, '-=0.1')
+      .fromTo('#hero-sub', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+      .fromTo('#hero-actions', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+      .fromTo('#hero-stats', { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.1');
+
+    // Section label
+    gsap.fromTo('#section-label',
+      { x: -30, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out',
+        scrollTrigger: { trigger: '#section-label', start: 'top 85%' }
+      }
+    );
+
+    // Unit cards stagger on scroll
+    gsap.fromTo('.unit-card',
+      { y: 60, opacity: 0, scale: 0.94 },
+      {
+        y: 0, opacity: 1, scale: 1,
+        duration: 0.65, stagger: 0.1, ease: 'power3.out',
+        scrollTrigger: { trigger: '#units-grid', start: 'top 82%' }
+      }
+    );
+
+    // Shimmer effect on card hover
+    document.querySelectorAll('.unit-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--mx', x + '%');
+        card.style.setProperty('--my', y + '%');
+      });
+    });
+
+    // Topbar scroll effect
+    window.addEventListener('scroll', () => {
+      const topbar = document.getElementById('topbar');
+      topbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
 </body>
 </html>

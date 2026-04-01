@@ -4,15 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Theory of Computation Questions</title>
-  <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="logo">Theory of Computation</div>
+
+  <canvas id="particleCanvas"></canvas>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <header class="topbar" id="topbar">
+    <div class="logo">
+      <span class="logo-icon"><i class="fas fa-microchip"></i></span>
+      <span class="logo-text">ToC<span class="logo-accent">.</span></span>
+    </div>
     <nav class="nav">
       <a href="index.html">Home</a>
       <a href="unit.html?unit=1">Unit 1</a>
@@ -20,43 +31,165 @@
       <a href="unit.html?unit=3">Unit 3</a>
       <a href="unit.html?unit=4">Unit 4</a>
     </nav>
+    <div class="nav-glow"></div>
   </header>
 
   <main class="container">
-    <section class="page-head">
-      <div>
-        <div class="hero-badge">Practice Questions</div>
+    <section class="page-head" id="page-head">
+      <div class="page-head-left">
+        <div class="hero-eyebrow">
+          <span class="pulse-dot"></span>
+          Practice Questions
+        </div>
         <h1 id="pageTitle">Unit Questions</h1>
         <p id="pageSubtitle">Reveal answer, step-by-step solution, and image-based diagrams inside cards.</p>
       </div>
 
-      <div class="toolbar-lite">
-        <input type="text" id="searchInput" placeholder="Search keyword" />
-        <input type="number" id="jumpInput" placeholder="Enter Q.No" />
-        <button id="jumpBtn">Jump</button>
+      <div class="toolbar-lite" id="toolbar">
+        <div class="search-wrap">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="searchInput" placeholder="Search keyword" />
+        </div>
+        <div class="jump-wrap">
+          <input type="number" id="jumpInput" placeholder="Q. No" />
+          <button id="jumpBtn"><i class="fas fa-crosshairs"></i> Jump</button>
+        </div>
       </div>
     </section>
 
-    <section class="stats-box">
-      <span id="visibleCount">0 questions visible</span>
-      <span>Click Show Answer → solution + image</span>
+    <section class="stats-box" id="stats-box">
+      <div class="stats-left">
+        <i class="fas fa-layer-group"></i>
+        <span id="visibleCount">0 questions visible</span>
+      </div>
+      <div class="stats-right">
+        <i class="fas fa-eye"></i>
+        <span>Click Show Answer → solution + image</span>
+      </div>
     </section>
 
     <section id="questionGrid" class="question-grid"></section>
   </main>
+
   <footer class="site-footer">
-    <div> <pre>© 2026 🌐 LJ UNITED NETWORKS 🚀
-         - Dixit Patel </pre>
-        <pre>Follow me on Social Media</pre></div>
-    <div class="footer-socials">
-     
-      <a href="https://www.instagram.com/dixit.patel_since_2005/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-      <a href="https://github.com/create2learn7238" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
-      <a href="https://www.linkedin.com/in/dixit-patel-7718993a1/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-      <a href="https://wa.me/919316227238" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+    <div class="footer-glow-line"></div>
+    <div class="footer-content">
+      <div class="footer-text">
+        © 2026 🌐 <strong>LJ United Networks</strong> 🚀 &nbsp;·&nbsp; Dixit Patel
+      </div>
+      <div class="footer-right">
+        <span class="footer-label">Follow me</span>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/dixit.patel_since_2005/?hl=en" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://github.com/create2learn7238" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+          <a href="https://www.linkedin.com/in/dixit-patel-7718993a1/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://wa.me/919316227238" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+        </div>
+      </div>
     </div>
   </footer>
 
   <script src="script.js"></script>
+  <script>
+    // ── Particle Canvas ──────────────────────────────────────────────
+    const canvas = document.getElementById('particleCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    const PARTICLE_COUNT = 60;
+
+    function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+    class Particle {
+      constructor() { this.reset(true); }
+      reset(initial) {
+        this.x = randomBetween(0, canvas.width);
+        this.y = initial ? randomBetween(0, canvas.height) : canvas.height + 10;
+        this.size = randomBetween(1, 2.5);
+        this.speedX = randomBetween(-0.3, 0.3);
+        this.speedY = randomBetween(-0.5, -0.15);
+        this.opacity = randomBetween(0.1, 0.45);
+        this.color = Math.random() > 0.5 ? '#FF4D00' : '#ff8a57';
+        this.pulse = randomBetween(0, Math.PI * 2);
+        this.pulseSpeed = randomBetween(0.005, 0.02);
+      }
+      update() {
+        this.x += this.speedX; this.y += this.speedY; this.pulse += this.pulseSpeed;
+        if (this.y < -10) this.reset(false);
+      }
+      draw() {
+        const alpha = this.opacity * (0.7 + 0.3 * Math.sin(this.pulse));
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+        ctx.fill();
+      }
+    }
+
+    function drawConnections() {
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 85) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(255,77,0,${(1 - dist / 85) * 0.1})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawConnections();
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // ── GSAP ──────────────────────────────────────────────
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.fromTo('#topbar', { y: -70, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' });
+
+    gsap.fromTo('#page-head',
+      { y: 30, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.65, ease: 'power3.out', delay: 0.2 }
+    );
+    gsap.fromTo('#toolbar',
+      { x: 30, opacity: 0 },
+      { x: 0, opacity: 1, duration: 0.6, ease: 'power2.out', delay: 0.35 }
+    );
+    gsap.fromTo('#stats-box',
+      { y: 20, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.5, ease: 'power2.out', delay: 0.5 }
+    );
+
+    // Animate newly rendered question cards
+    function animateCards() {
+      gsap.fromTo('.question-card',
+        { y: 40, opacity: 0, scale: 0.96 },
+        { y: 0, opacity: 1, scale: 1, duration: 0.55, stagger: 0.06, ease: 'power3.out' }
+      );
+    }
+
+    // Hook into script.js renderQuestions by observing DOM
+    const observer = new MutationObserver(() => { animateCards(); });
+    const grid = document.getElementById('questionGrid');
+    if (grid) observer.observe(grid, { childList: true });
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('topbar').classList.toggle('scrolled', window.scrollY > 40);
+    });
+  </script>
 </body>
 </html>
